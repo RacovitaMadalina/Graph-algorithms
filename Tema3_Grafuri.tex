@@ -1,0 +1,278 @@
+\documentclass{article}
+\usepackage{amsthm}
+\usepackage{amssymb, amsmath}
+\usepackage{array}
+\usepackage[romanian]{babel}
+\usepackage{bm}
+\usepackage{enumerate}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{index}
+%\usepackage{tikz}
+\usepackage{ucs}
+\usepackage[utf8]{inputenc}
+
+\geometry{
+ a4paper,
+ total={160mm,257mm},
+ left=30mm,
+ right=30mm,
+ top=20mm,
+ bottom=20mm,
+ }
+
+\begin{document}
+
+\begin{titlepage}
+
+\begin{center}
+Universitatea ``Alexandru Ioan Cuza" din Iasi\\
+Facultatea de Informatica\\
+\end{center}
+
+\vspace{80mm}
+ 
+\begin{center}
+\begin{Huge}
+\textbf{Algoritmica Grafurilor}
+\textbf{ - TEMA 3}
+\end{Huge}
+\end{center}
+ 
+\vspace{60mm}
+\begin{center}
+\begin{Large}
+\textbf{Studenti:} Buterchi Andreea, Racovita Madalina-Alina
+\newline
+\textbf{Grupa:} B2
+\textbf{Anul:} II
+\end{Large}
+\end{center}
+\vfill
+
+\end{titlepage}
+
+
+\section{Problema 1}
+\  
+\newline
+Plecand de la digraful $G=(V,E)$ si de la functia de pondere $w:V\rightarrow\mathbb{R}$, vom construi graful $G'$ unde $V(G')=V(G)\cup\{s,t\}$ iar $E(G')=E(G)\cup\{sx|w(x)>0, x\in V(G)\}\cup\{ty|w(t)<0, y\in V(G)\}$. Fiecarei muchii de forma $\{sx|w(x)>0, x\in V(G)\}$, ii vom asigna o capacitate egala cu ponderea, muchiilor de tipul $\{ty|w(t)<0, y\in V(G)\}$ le vom asigna o capacitate egala cu minus ponderea, iar restul arcelor primesc capacitatea infinit. 
+\newline
+\newline
+Vom avea astfel reteaua $R=(G,s,t,c)$. Vom numi sectiune in reteaua $R$ o partitionare a nodurilor retelei intr-o pereche ordonata $(S,T)$ ce consta in doua submultimi nevide $S,T$, unde $S\cup T=V$ iar $S\cap T=\emptyset$, $s \in S$ si $t \in T$.
+Ponderea sectiunii $(S,T)$ este egala cu suma capacitatilor muchiilor $(u,v)$.
+Capacitatea sectiunii pentru reteaua de flux $R$ este egala cu ponderea sectiunii $(S,T)$ : $c(S,T)=\sum_{i \in S}\sum_{j \in T} c_{ij}$. 
+\newline
+\newline
+O sectiune pentru $R$ este minima daca are valoarea minima a capacitatii dintre toate sectiunile lui $R$. Conform teoremei de flux maxim-sectiune minima(\textbf{Max-flow Min-cut}) valoarea maxima a unui flux in reteaua $R$ este egala cu capacitatea unei sectiuni minime a retelei.
+\newline
+\newline
+Orice sectiune $(S,T)$ de capacitate finita nu va avea muchii din $G$ intre cele 2 partitii. Asadar, partitia corespunzatoare sursei $s$, care va fi  inclusa in $S-\{s\}$, va forma o multime inchisa deoarece nu vor exista muchii din $G$ intre cele doua partitii in urma sectionarii. Cum arcele ce ar putea lega cele doua partitii(i.e. $uv \in E(G)$) au costul infinit, ele nu pot face parte din sectiunea minima deoarece asta ar determina ca fluxul maxim sa fie infinit, ceea ce nu convine, deoarece contrazice minimalitatea sectiunii.
+\newline
+\newline
+Pentru a fi o sectiune minima, trebuie minimizata suma capacitatilor muchiilor dintre cele doua partitii:  $c(S,T)=min\sum_{i \in S}\sum_{j \in T} c_{ij}$. 
+\newline
+\newline
+Aceasta va fi egala cu diferenta dintre suma ponderilor varfurilor cu ponderi pozitive si suma ponderilor din multimea inchisa. Deoarece aceasta diferenta trebuie sa fie minima, inseamna ca termenul din partea dreapta (i.e. suma ponderilor nodurilor din multimea inchisa) trebuie sa fie maxima lucru ce se rezuma la gasirea unei multimi inchise de pondere maxima. Prin urmare sectiunea minima va conduce la obtinerea multimii inchise de pondere maxima. Calcularea capacitatii sectiunii minime se realizeaza polinomial, parcurgand succesiv nodurile grafului in $O(n)$ dar si muchiile grafului in $O(n^2)$ pentru determinarea multimii inchise.
+\newline
+\newline
+Prin orice taietura fluxul este egal cu cel maxim pentru ca nu exista o alta cale pe care ar putea ajunge flux de la sursa la destinatie și care sa nu treaca prin taietura (ar incalca tocmai definitia ei); sau, altfel spus, valoarea unui flux intr-o retea este data de fluxul oricarei taieturi. Astfel, fluxul total va fi marginit de cea mai mica capacitate a unei taieturi. Daca este indeplinit faptul ca exista o taietura $(S,T)$ a lui $G$ astfel incat fluxul net prin taietura este egal cu capacitatea acelei taieturi atunci stim ca acea taietura nu poate fi decat una de capacitate minima. Ultima incercare de a gasi o cale de la sursa la destinatie va rezulta in gasirea doar a elementelor marginite de o astfel de taietura. Acesta este un argument pentru care gasirea fluxului maxim se va reduce la gasirea sectiunii minime, dar acest lucru rezulta si din teorena flux-maxim sectiune-minima, enuntata precedent. 
+\newline
+\newline
+Am aratat astfel ca problema gasirii unei multimi inchise de pondere maxima (pentru digraful $G$ si functia de pondere data) se poate rezolva in timp polinomial cu ajutorul unui algoritm de flux maxim pe reteaua R ulterior construita.
+
+\
+\section{Problema 2}
+\   
+\newline
+\textbf{a)} 
+Ordonam secventa de grafuri descrescator, $d_1 \geq d_2 \geq ...\geq d_n$, avand in vedere faptul ca indiferent de ordonarea gradelor, secventa respectiva va fi reprezentativa aceluiasi graf. Avem in vedere si faptul ca o secventa grafica poate fi o secventa de grade pentru mai mult de un graf.
+\newline
+\newline
+Conform teoremei \textbf{Havel Hakimi}, o secventa $s=(d_1,d_2,....d_n)\in \{0,1,....n-1\}^n$ $(n \in \mathbb{N}, n \geq 2)$ unde $d_1 \geq d_2 \geq ...\geq d_n$ este secventa grafica daca si numai daca secventa $s_1=(d_2-1, d_3-1, ...,
+d_{d_1+1}-1, d_{d_1+2},..., d_n)$ este secventa grafica. (i.e. daca formam o noua secventa de grade eliminand gradul maxim, adica elementul de pe prima pozitie din secventa, si scazand 1 unitate din urmatoarele $d_1$ componente se va obtine tot o secventa grafica).
+\newline
+\newline
+Demonstratia inversa(\textbf{"$\leftarrow$"}) a teoremei \textbf{Havel Hakimi}:
+\newline
+\newline
+Presupunand ca $s_1$ este secventa grafica, atunci din definitie exista un graf $G_1$ de ordin $n-1$ care are secventa de grade $s_1$. 
+\newline
+\newline
+Vom eticheta nodurile grafului $G_1$ cu $v_2, v_3,..., v_n$ in asa fel incat:
+\begin{center}
+$d(v_i)=\begin{cases} d_i-1, \forall i \in \{2,3,..., d_1+1\} \\ d_i, \forall i \in \{d_1+2,..., n\} \end{cases}$
+\end{center}
+Putem construi un nou graf $G$ prin urmatorii pasi: la graful $G_1$ adaugam un nou varf $v_1$, adiacent cu $d_1$ muchii in asa fel incat $v_1v_i \in E(G), \forall i \in \{2,3,..., d_1+1\}$. 
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.8]{fig3.png}
+\end{figure}
+\newline
+Adaugand muchiile $v_1v_i \in E(G), \forall i \in \{2,3,..., d_1+1\}$ la primele $d_1$ noduri din $G'$ va face ca in $G$, $d(v_1)=d_1$, $d(v_2)=d_2-1+1=d_2$, $d(v_3)=d_3-1+1=d_3$, ..., $d(v_{d_1+1})=d_{d_1+1}-1+1=d_{d_1+1}$. Astfel, $d(v_i)=d_i, \forall i \in \{1,2,..., n\}$ si prin urmare, secventa $s=(d_1,d_2,..., d_n)$ este grafica.
+\newline
+\newline
+Demonstratia directa(\textbf{"$\rightarrow$"}) a teoremei \textbf{Havel Hakimi}:
+\newline
+\newline
+Presupunem ca $s$ este o secventa grafica  $\rightarrow$ exista grafuri de ordin $n$ care transced din secventa de grade $s$. Din acesta multime de grafuri, alegem arbitrar $G$, cu $V(G)=\{v_1,v_2,...,v_n\}$ unde $d(v_i)=d_i, \forall i=\overline{1,n}$ iar suma gradelor nodurilor adiacente cu $v_1$ este maximala.
+\newline
+\newline
+Vom demonstra ca $v_1$ este adiacent cu varfuri care au gradele $d_2, d_3,..., d_{d_i+1}$. Presupunem prin \textbf{R.A.} contrariul, adica $v_1$ nu este adiacent cu varfuri care au gradele $d_2, d_3,..., d_{d_i+1}$. Atunci $\exists$ doua noduri $v_r$ si $v_s$ cu $d_r>d_s$ in asa fel incat $v_1v_s \in E(G)$ dar $v_1v_r \not \in E(G)$. Din moment ce $d_r>d_s$, $\exists v_t \in V(G)$ astfel incat $v_tv_r \in E(G)$ dar $v_tv_s \not \in E(G)$.
+\newline
+\newline
+Eliminam muchiile $v_1v_s$ si $v_rv_t$ si adaugam muchiile $v_1v_r$ si $v_sv_t$, ca in figura de mai jos. Aceasta interschimbare de muchii, va determina ca graful $G'$ nou format sa aiba \textbf{aceeasi} secventa de grade ca graful $G$, dar suma gradelor nodurilor adiacente cu $v_1$ in $G'$ sa fie mai mare, decat cea din G lucru ce va constrazice alegerea lui $G$ avand secventa de grade $s$(tinand cont si de ordonarea descrescatoare a gradelor din secventa).
+\begin{center}
+$\sum_{v_1x \in E(G)} d(x)<\sum_{v_1y \in E(G')}d(y)$
+\end{center} 
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4]{fig2.png}
+\end{figure}
+Asadar, $v_1$ este adiacent cu nodurile ce au gradele $d_2,d_3,..., d_{d_1+1}$. In acest mod, graful $G'=G-\{v_1\}$ are secventa de grade $s_1=(d_2-1,d_3-1,..., d_{d_i+1}-1, d_{d_i+2},..., d_n)$ grafica.
+\newline
+\newline
+$\Longrightarrow$ $s$ este grafica $\Leftrightarrow$ $s_1$ este grafica, iar teorema este astfel demonstrata.
+\newline
+\newline
+Fiind data secventa grafica $d$, pe care o vom ordona descrescator in functie de grade, vom elimina elementul $d_k$, $\forall k=\overline{1,n}$ (unde $k$ va fi indicele de dupa ordonare) si vom decrementa primele $d_k$ cele mai mari componente ale noului vector cu o unitate exact ca in teorema Havel Hakimi. Secventa $d'$ nou formata va fi urmatoarea: $d'=(d_1-1, d_2-1, ...., d_{d_k}-1, d_{d_k+1},..., d_n)$( ordinea ramane aceeasi deoarece daca eliminam componenta $d_k$ fiindca elementele sunt deja ordonate descrescator, nu se va produce nicio modificare in ordinea elementelor in noul vector).
+\newline
+\newline
+Observam ca teorema lui Havel Hakimi va functiona si daca am elimina un $d_k$ oarecare si nu neaparat elementul de pe prima pozitie din secventa grafica. Demonstratia se realizeaza in mod similar.
+\newline
+\newline
+Presupunand ca $d'$ este secventa grafica, atunci din definitie exista un graf $G_1$ de ordin $n-1$ care are secventa de grade $d'$. 
+\newline
+\newline
+Vom eticheta nodurile grafului $G_1$ cu $v_1, v_2,...,v_{k-1}, v_{k+1},..., v_n$ in asa fel incat:
+\begin{center}
+$d(v_i)=\begin{cases} d_i-1, \forall i \in \{1,2,3,..., d_{k-1}, d_k\}\\ d_i, \forall i \in \{d_{k+1},..., n\} \end{cases}$
+\end{center}
+Putem construi un nou graf $G$ prin urmatorii pasi: la graful $G_1$ adaugam un nou varf $v_k$, adiacent cu $d_k$ muchii in asa fel incat $v_kv_i \in E(G), \forall i \in \{1,2,3,..., d_{k-1}, d_k\}$. 
+\newline
+\newline
+Adaugand muchiile $v_kv_i \in E(G), \forall i \in \{1,2,3,..., d_{k-1}, d_k\}$ la primele $d_k$ noduri din $G'$ va face ca in $G$, $d(v_1)=d_1-1+1=d_1$, $d(v_2)=d_2-1+1=d_2$, $d(v_3)=d_3-1+1=d_3$, ..., $d(v_k)=d_k$, $d(v_{d_k})=d_{d_k}-1+1=d_{d_k}$. Astfel, $d(v_i)=d_i, \forall i \in \{1,2,..., n\}$ si prin urmare, secventa $s=(d_1,d_2,..., d_n)$ este grafica. Demonstratia reciproca se face exact ca in cazul Havel Hakimi, inlocuind  $v_1$ cu $v_k$.
+\newline
+\newline
+Prin urmare, daca $d$ este secventa grafica, atunci vectorul $d'$, obtinut din $d$ prin stergerea unei componente $d_k$ oarecare si micsorarea cu cate o unitate a primelor $d_k$ cele mai mari componente al noului vector, este secventa grafica.
+\newline
+\newline
+\textbf{b)} Pentru a testa ca un vector $d$ dat este secventa grafica, vom aplica teorema \textbf{Havel Hakimi} demonstrata la subpunctul precedent, in repetatate randuri, ordonand la fiecare pas noua secventa de grade rezultata. Initial facem ordonarea si aplicam teorema conform careia o secventa $s=(d_1,d_2,....d_n)\in \{0,1,....n-1\}^n$ $(n \in \mathbb{N}, n \geq 2)$ unde $d_1 \geq d_2 \geq ...\geq d_n$ este secventa grafica daca si numai daca secventa $s_1=(d_2-1, d_3-1, ...,
+d_{d_1+1}-1, d_{d_1+2},..., d_n)$ este secventa grafica. Secventa $s_1$ o ordonam din nou si aplicam teorema s.a.m.d. Ordonarea se realizeaza in timp polinomial $O(n^2)$.
+\newline
+\newline
+La fiecare pas, pe langa ordonare, se vor elimina si nodurile cu grade nule deoarece, tinand cont de algoritm, eliminand un varf de grad 0, numarul de grade modificate va fi tot 0 (nodurile izolate nu influenteaza   decizia asupra secventei nou formate de grade). Algoritmul returneaza \textit{true} daca se pot elimina toate varfurile, si \textit{false} in momentul in care in secventa se gaseste un nod care are grad negativ fapt ce contrazice faptul ca orice nod intr-un graf are gradele mai mari sau egale cu 0, deci o secventa de acest tip va fi clar deductibila ca nefiind grafica.
+\newline
+\newline 
+Consideram ca se elimina macar cate un varf la fiecare pas, si de asemenea, ca realizam ordonarea fiecarei secvente nou rezultate. Cum secventa din input are lungime $n$, si cum eliminarea tuturor nodurilor se va face in   $O(n)$, se observa in mod trivial ca timpul necesar executiei algoritmului va fi polinomial.
+\
+\section{Problema 3}
+\ 
+\textbf{a)}
+Numim flux in reteaua $R=(G,s,t,c)$ o functie $x:V\times V\rightarrow \mathbb{R}$ care satisface:
+\newline
+\newline
+\textbf{1)} $0 \leq x_{ij} \leq c_{ij}, \forall ij \in V\times V$ (\textit{conditie de marginire a fluxului}: orice flux trebuie sa fie nenul si subcapacitar)
+\newline
+\textbf{2)} $\sum _{j \in V} x_{ji}-\sum_{i \in V}x_{ij}=0, \forall i \in V-\{s,t\}$ (\textit{conditia de conservare a fluxului})
+\newline
+\newline
+Fluxul in reteaua $R$ va fi egal cu:
+\begin{center}
+$v(x)=\sum_{su \in E} x(su) -\sum_{vs \in E} x(vs)$
+\end{center}
+Pentru a ne referi cu usurinta la nodurile gridului, vom nota matricea cu $M$, unde fiecare element $M[i][j]$ este un nod al gridului.
+\newline
+\newline
+Vom folosi algoritmul lui Fulkerson de determinare a valorii fluxului maxim in care fiecare linie orizontala din grid impreuna cu muchiile aferente de la $s$ la primul nod al liniei respective din matrice, si de la ultimul nod al liniei pana la $t$ va reprezenta un drum de crestere. Un prim drum ar fi ilustrat in desenul de mai jos. 
+\begin{center}
+\includegraphics[width=1.0\textwidth]{fig6.png}
+\end{center}
+Cum fiecarui arc ii este asignata capacitatea 1,conform lui Ford-Fulkerson, fluxul maxim pe acest drum va avea valoarea capacitatii minime asignate arcelor. Prin urmare, fluxul pe acest drum de crestere va avea valoarea 1, si astfel se va obtine in $t$ dupa primul pas un flux de valoare 1. Cum pe acest drum fluxul va fi egal cu capacitatea pe fiecare arc, este evident observabil ca pe aceste arce nu mai putem pompa flux.
+\newline
+\newline
+Procedeul se aplica pentru urmatoarele drumuri de crestere corespunzatoare urmatoarelor linii din matricea gridului, si se incrementeaza fluxul din $t$ dupa fiecare pas. La final, dupa cele $n$ cresteri succesive ale fluxului, se obtine in $t$ un flux de valoare $v(x)=n$. 
+\newline
+\newline
+Presupunem prin \textbf{R.A.} ca $v(x)$ nu este valoarea maxima a fluxului in reteaua $R$ deci, $\exists v'(x)>v(x)$.
+Vom alegere in pasul incipient un singur drum de crestere care sa contina un arc nord-sud si anume $(M[1][n], M[2][n])$ si apoi arcul $(M[2][n], t)$. Pe acest drum fluxul va fi tot unitar. Pe liniile $i, \forall i=\overline{3,n}$ se respecta procedeul enuntat mai sus, referitor la alegerea drumurilor corespunzatoare liniilor orizontale. Astfel, pana in pasul curent in $t$ avem un flux de $n-1$. Cum pe linia a 2-a nu nodul $M[2][n]$ nu mai poate pompa fluxul pe niciun arc care sa comunice cu nodul $t$, algoritmul se incheie iar valoarea fluxului $v'(x)=n-1<v(x)$ (contradictie).
+\newline
+\newline
+Putem observa, astfel, ca orice alta alegere de drum de crestere care include si cel putin  un arc nord-sud va conduce la blocarea alegererilor ulterioare a drumurilor de la $s$ la $t$ prin faptul ca pe arcele respective fluxul devine egal cu capacitatea, iar fluxul nu mai poate fi pompat catre destinatie.
+\newline
+\newline
+Asadar, valoarea fluxul maxim in reteaua $R$ este $n$.
+\newline
+\newline
+\newline
+\newline
+\textbf{b)}
+Conform teoremei drumului de crestere un flux x este de valoare maxima intr-o retea $R$, daca si numai daca, nu exista drumuri de crestere a fluxului in reteaua R. Prin urmare, daca se porneste de la fluxul nul si s-ar incerca cresteri succesive pe drumuri de crestere ale fluxului numai cu arce directe, pentru a se obtine un flux doar de valoare 1,  trebuie sa gasim un drum de crestere in retea astfel incat algoritmul de determinare a fluxului maxim sa se opreasca dupa primul pas. 
+\newline
+\newline
+Mai concret, aceasta alegere va conduce la blocarea oricarui alt flux prin structura matriceala a gridului de $n\times n $, asigurandu-ne de faptul ca la destinatie, adica la nodul $t$, va ajunge doar fluxul de valoare unitara.
+In pasul incipient vom alege drum de crestere de pe diagonala principala a gridului, adica un drum alternat nord-sud, vest-est cu urmatoarele arce: $(s,M[1][1]),(M[1][1],M[2][1]), (M[2][1]$,
+\
+$M[2][2]),(M[2][2],M[2][3]),....,(M[n-1][n-1],M[n][n-1]), (M[n][n-1],M[n][n]), (M[n][n],t)$, ca in figura de mai jos. 
+\
+\newline
+\
+\newline
+\begin{center}
+\includegraphics[width=1.0\textwidth]{fig5.png}
+\end{center}
+\
+\newline
+\
+\newline
+Cum fiecarui arc ii este asignata capacitatea 1,conform teoremei lui Ford-Fulkerson, fluxul maxim pe acest drum va avea valoarea capacitatii minime asignate arcelor. Prin urmare, fluxul pe acest drum de crestere va avea valoarea 1 ceea ce respecta ideea de flux nenul si subcapacitar pe orice arc. ( $ 0 \leq x_{ij} \leq c_{ij}$ unde $\forall (i,j) \in E(D)$. Asadar, fluxul in retea in urma pasului curent va fi egal cu 1.
+\newline
+\newline
+Cum pe acest drum este clar ca nu mai poate fi pompat un alt flux, deoarece fluxul este egal cu capacitatea, arcele drumului de crestere ales anterior, nu mai pot face parte dintr-un alt drum de crestere. In desenul de mai jos am ilustrat prin eliminarea arcelor in cauza, va determina imposibilitatea alegerii ulterioare a  unui alt drum de crestere cu arce directe in reteaua R, mai concret nu se mai poate pompa flux de la sursa $s$ la destinatia  $t$ , obtinandu-se ca rezultat final un flux de $1$.
+\begin{center}
+\includegraphics[width=1.0\textwidth]{fig4.png}
+\end{center}
+Pentru a motiva si mai precis faptul ca nu mai poate exista niciun alt drum de crestere, observam ca in retea orice nod interior structurii are are gradul intern egal cu gradul extern egal cu 2, in afara de nodurile aflate in colturile matricii care au un arc vertical in minus.
+\begin{center}
+$d^+(M[i][j])= d^-(M[i][j])-1=1, \forall i,j \in \{1,n\}$
+\end{center}
+\begin{center}
+$d^+(M[i][j])= d^-(M[i][j])=2$, altfel
+\end{center}
+Orice nod al gridului datorita orientarii nord-sud, vest-est a arcelor pot pompa flux fie in jos fie in dreapta. In cazul de fata, ne intereseaza nodurile de sub diagonala principala, dat faptul ca nodurile de deasupra diagonalei principale nu mai au legatura directa cu sursa $s$.  Aceste noduri vor fi fortate sa pompeze fluxul ori la dreapta ori in jos, dar in cazul nodului $M[n][n-1]$ nu se va mai putea continua drumul de crestere caci nu mai exista niciun arc direct catre un nod care sa comunice cu nodul destinatie.
+\newline
+\newline
+Prin argumentele livrate, conchidem ca oricum am alege un nod, se va ajunge in $M[n][n-1]$ de unde nu se va mai putea continua drumul de crestere. Deci fluxul obtinut va fi doar de 1.
+
+
+
+\section{Problema 4}
+\   
+\newline
+Vom stabili o strategie de joc convenabila lui \textbf{A}, care ii va determina acesteia  castigul. Deoarece jocul este descris in felul urmator: pornind de la $v_0 \in V$, \textbf{A} alege arcul $v_0v_1$, apoi \textbf{B} alege arcul $v_1v_2$, apoi \textbf{A} alege $v_2v_4$ s.a.m.d. pentru ca \textbf{A} sa castige acesta trebuie sa faca ultima alegere posibila, aducandu-l pe \textbf{B} in imposibilitatea de a mai face orice alta alegere ulterioara, si jocul astfel se incheie. 
+\newline
+\newline
+Observam ca in acest mod arcele digrafului $D=(V,E)$ alese de \textbf{A} formeaza un cuplaj perfect deoarece oricare doua muchii din cuplaj nu se intersecteaza in niciun nod comun; de asemenea, este cuplaj perfect deoarece satureaza toate muchiile digrafului. In acest mod, pentru a demonstra ca \textbf{SAT} se reduce polinomial la problema ASTRAT (care se rezuma de fapt gasirea unui cuplaj perfect) vom demonstra ca \textbf{2-SAT} se reduce polinomial la problema gasirii cuplajului perfect.
+\newline
+\newline
+Avem digraful $D'=(V,E)$ ($D'$ este un graf partial al digrafului $D$ insa este format doar din arcele alese de \textbf{A}), instanta a problemei gasirii cuplajului perfect. Fie multimile partitiei $S_1=\{a_i|i=\overline{0,n}, i-par\}$ si $S_2=\{b_i|i=\overline{1,n}, i-impar\}$.
+\newline
+\newline
+Acum reducem digraful $D'$ la o formula $\phi$ in \textbf{2-CNF}(conjunctie de clauze cu 2 literali), in asa fel incat daca $\phi$ este satisfiabila, atunci $d$ este cuplaj perfect, si reciproc. 
+\newline
+\newline
+Pentru fiecare muchie $a_ib_j \in E(D')$, cream o variabila $x_{ij}$. Fie o functie $s:M\rightarrow \{0,1\}$, unde $M$ este multimea formata din variabilele formulei $\phi$, o functie ce asigneaza valori de adevar variabilelor. Ideea este urmatoarea: $s(x_{ij})=1$ daca $a_ib_j$ apartine cuplajului perfect. Pentru fiecare nod $i$ creem formule in \textbf{2-CNF} ca instante pentru algoritmul de 2-satisfiabilitate.
+\begin{center}
+$S_{1_i}=\wedge_{j<k}(\lnot x_{ij}\lor \lnot x_{ik})$
+\end{center}
+\begin{center}
+$S_{2_i}=\wedge_{j<k}(\lnot x_{ji}\lor \lnot x_{ki})$
+\end{center}
+Pentru ca $S_{1_i}$ sa fie satisfiabila, toate cu exceptia cel mult unui $x_{ij}$ trebuie sa aiba asignata valoarea 0. Pentru a argumenta asta, presupunem ca atat $x_{ij}$ cat si $x_{ik}$ sunt adevarate. Atunci clauza $(\lnot x_{ij}\lor \lnot x_{ik})$ este falsa, si in consecinta $s(S_{1_i})=0$ fapt ce nu coincide strategiei de castig a jocului. Aceeasi conditie se impune si pentru $S_{2_i}$. 
+\newline
+\newline
+Fie $C=(\wedge^n_{i=0;i-par}S_{1_i})\land (\wedge^n_{i=1;i-impar}S_{2_i})$. In acest mod, $C$ va fi satisfiabila daca si numai daca fiecare varf din $D'$ nu este incidenta cu nici una din muchiile deja alese, si prin urmare se formeaza cuplajul perfect. 
+\newline
+\newline
+Am aratat astfel ca \textbf{2-SAT}-ul se reduce in timp polinomial (deoarece avem de parcurs nodurile digrafului si de format clauzele $\rightarrow O(n)$ dar si de parcurs muchiile digrafului $\rightarrow O(n^2)$) la problema gasirii unui cuplaj perfect, care in cele din urma se reduce la problema \textbf{ASTRAT} ce descrie jocul a carui strategie de castig am mentionat-o anterior.
+\end{document}

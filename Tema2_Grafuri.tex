@@ -1,0 +1,265 @@
+\documentclass{article}
+\usepackage{amsthm}
+\usepackage{amssymb, amsmath}
+\usepackage{array}
+\usepackage[romanian]{babel}
+\usepackage{bm}
+\usepackage{enumerate}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{index}
+%\usepackage{tikz}
+\usepackage{ucs}
+\usepackage[utf8]{inputenc}
+
+\geometry{
+ a4paper,
+ total={160mm,257mm},
+ left=30mm,
+ right=30mm,
+ top=20mm,
+ bottom=20mm,
+ }
+
+\begin{document}
+
+\begin{titlepage}
+
+\begin{center}
+Universitatea ``Alexandru Ioan Cuza" din Iasi\\
+Facultatea de Informatica\\
+\end{center}
+
+\vspace{80mm}
+ 
+\begin{center}
+\begin{Huge}
+\textbf{Algoritmica Grafurilor}
+\textbf{ - TEMA 2}
+\end{Huge}
+\end{center}
+ 
+\vspace{60mm}
+\begin{center}
+\begin{Large}
+\textbf{Studenti:} Buterchi Andreea, Racovita Madalina-Alina
+\newline
+\textbf{Grupa:} B2
+\textbf{Anul:} II
+\end{Large}
+\end{center}
+\vfill
+
+\end{titlepage}
+
+
+\section{Problema 1}
+\  
+\newline
+\newline
+\textbf{a)}
+Se numeste arbore partial al lui $G$, un graf partial $T=(V, E')(E'\subseteq E)$ care este aciclic si conex. Arborele partial, care are suma costurilor muchiilor minima si care cuprinde toate nodurile si doar o parte din muchii, poarta numele de arbore partial de cost minim.
+Consideram $T^*$ ca fiind arborele partial de cost minim al lui $G$, dat in raport cu functia $c:E \rightarrow \mathbb{R}$ si $\epsilon>0$, un numar real pozitiv oarecare. 
+\newline
+\newline
+Daca $T^*$ este arbore partial de cost minim atunci $\sum_{e\ in E(T^*)} c(e) \leq \sum_{e \in E(T)} c(e), \forall T$- parbore partial al grafului $G$.
+Vom calcula costul arborilor partiali ai grafului $G$ in raport cu functia de cost $\overline{c}: E \rightarrow \mathbb{R}$. Prin urmare, $\overline{c}(T)= \sum_{e \in E(T)} \overline{c}(e)=\sum_{e \in E(T)} c(e) - \sum_{e \in E(T) \cap E(T^*)}\epsilon$.
+Alegem in mod arbitrar un arbore $A$ apartenent al multimii de arbori partiali ai grafului $G$ si vom demonstra ca $T^*$ este unicul arbore partial de cost minim in raport cu functia $\overline c$ Vom calcula costurile celor doi arbori in raport cu functia $\overline{c}:E \rightarrow \mathbb{R}$. $T^*$ are $n-1$ muchii, lucru rezultat prin prisma definitiei arborelui, el cuprinzand toate nodurile grafului $G$. Astfel costul total al lui $T^*$ va fi $\overline{c}(T^*)= \sum_ {e \in E(T^*)} \overline{c}(e)=\sum_{e \in E(T^*)}(c(e)- \epsilon)=( \sum_{e \in E(T^*)}c(e) )-(n-1)\cdot \epsilon$. 
+\newline
+\newline
+Pe de alta partea, $|E(A) \cap E(T^*)| = n-1,$ daca $A=T^*$ si $|E(A) \cap E(T^*)| < n-1,$ daca $A \not =T^*$ deoarece arborele $A$, difera de arborele $T^*$ prin cel putin o muchie. Deci daca avem muchia $e \in E(A)$ cum $e \not \in E(T^*)$ $\rightarrow \overline{c}(e)= c(e)$. Ne va rezulta de aici ca in arborele $A$, desi are tot $(n-1)$ muchii, exista minim o muchie al carei cost va ramane neschimbat prin functia $\overline{c}$ deci costul maxim al lui $A$ ar putea fi $(\sum_{e \in E(A)} c(e)) - (n-2) \cdot \epsilon$. Si cum $\sum_{e \in E(T^*)} c(e) \leq \sum_{e \in E(A)}c(e), \forall A$- arbore partial al grafului G (deoarece, din ipoteza, $T^*$ este arbore partial de cost minim), ne va rezulta astfel ca $\overline{c}(T^*)<\overline{c}(A), \forall A$.
+\newline
+\newline
+Prin urmare, $T^*$ este unicul arbore partial de cost minim al lui $G$, in raport cu functia $\overline{c}:E \rightarrow \mathbb{R}$, acest avand costul mai mic decat costul oricarui alt arbore partial al grafului $G$.
+\newline
+\newline
+\textbf{b)} Algoritmul lui Kruskal este un algoritm fundamental pentru determinarea arborilor partiali de cost minim, acesta bazandu-se pe o strategie Greedy. Pentru a determina un arbore partial de cost minim se considera initial ca nici o muchie nu este selectata. Cu alte cuvinte, se pleaca de la o padure formata din $n$ arbori (unde $n=|V(G)|$) fiecare arbore fiind format dintr-un singur varf. La fiecare pas al algoritmului se selecteaza o muchie de cost minim care nu a mai fost selectata si care nu formeaza cicluri cu cele deja selectate. 
+\newline
+\newline
+Pentru a extrage minimul se sorteaza muchiile crescator dupa cost si se parcurg secvential muchiile ordonate iar pentru a testa daca o muchie formeaza cicluri cu muchiile deja selectate este suficient sa se testeze daca extremitatile muchiei se gasesc in aceeasi componenta conexa (adica in acelasi arbore). Algoritmul cerceteaza in cel mai defavorabil caz toate cele $m$ muchii pentru a selecta cele $n-1$ care nu formeaza cicluri. 
+\newline
+\newline
+Consideram ordonarea muchiilor pentru algoritmul lui Kruskal in raport cu functia $\overline{c}:E\rightarrow \mathbb{R}$,  $T^*$ fiind un arbore partial de cost minim oarecare al lui $G$ returnat de algoritm. Conform subpunctului \textbf{a)}, in raport cu functia de cost $\overline{c}$, $T^*$ este unicul arbore partial de cost minim, prin urmare, algoritmul lui Kruskal va returna arborele $T^*$. Observam ca in cazul unei alegeri cat mai triviale ale lui $\epsilon$ ($\epsilon \rightarrow 0)$, ordonarea precedenta ramane o ordonare valida si in raport cu functia $c$ (deoarece in acest caz $\overline{c}(e)\cong c(e), \forall e \in E(T^*)$). Aceasta este ordonarea pentru care algorimul va returna $T^*$, unde $T^*$ este un arbore partial de cost minim oarecare. \textbf{(1)}
+\newline
+\newline
+Daca in schimb, pornim de la arborele $T^*$ returnat de algortmul lui Kruskal ca fiind un arbore partial de cost minim, in raport cu functia $c:E\rightarrow \mathbb{R}$, vom demonstra ca trecerea la functia de cost $\overline{c}:E\rightarrow \mathbb{R}$, va determina de asemenea existenta unuei ordonari a muchiilor pentru care algoritmul sa returneze $T^*$. Fie $T*=(t_1, t_2,..., t_{n-1})$ muchiile arborelui rezultat in urma aplicarii algoritmului, in ordinea selectarii lor. Cand facem trecerea de la functia de cost $c$ la functia $\overline{c}$, algoritmul lui Kruskal va returna arborele $A=(a_1, a_2,..., a_{n-1})$ unde $\overline{c}(a_i)=c(t_i)-\epsilon$. Alegem $\epsilon=min(c(e_j)-c(e_i))$ unde $j>i$, $i,j=\overline{1,m}$ si $c(e_j)-c(e_i) \not = 0$, considerand $E(G)=(e_1, e_2,..., e_i,..., e_j,..., e_m)$ fiind sortarea tuturor muchiilor grafului $G$ in functie de cost ($\epsilon=$ cea mai mica diferenta de cost dintre doua muchii cu costuri diferite).Faptul ca introducem functia $\overline{c}$ va modifica costurile muchiilor $e, \forall e \in E(T^*)$, restul costurilor raman neschimbate, iar acest lucru va modifica sortarea realizata in incipitul algoritmului Kruskal pentru ordonarea crescatoare a costurilor muchiilor. Deci daca avem in sortare minim 2 muchii cu cost egal, $e_i$ si $e_{i+1}$, iar $e_{i+1} \in E(T^*)$, prin introducerea functiei $\overline{c}$ deci implicit prin scaderea lui $\epsilon$ din costul ce ii fusese asignat muchiei $e_{i+1}$ ce face parte din arborele partial de cost minim $T^*$, $e_{i+1}$ va aparea in noua sortare initiala din Kruskal inaintea lui $e_i$. Cu toate acestea, muchia $e_{i+1}$ va si selectata si va face parte din ordonarea finala a muchiilor arborelui partial de cost minim returnat de Kruskal.
+\newline
+\newline
+In ceea ce priveste secventele de muchii din sortarea initiala care au costuri diferite, muchiile apartenente arborelui $T^*$, vor avea oricum costul mai mic, $\overline{c}(e)=c(e)-\epsilon<c(e), \forall e \in E(T^*)$, deci algoritmul lui Kruskal va selecta mereu muchia $a_i$, unde $a_i \in E(T^*)$ in loc de $a_j$ unde $a_j \not \in E(T^*)$ si unde $a_j$ este muchia imediat urmatoare cu cost diferit de $a_i$ din sortarea initiala, $\forall i, j \in \overline{1,m}$. Si cum algoritmul lui Kruskal selecteaza muchii de cost minim, ne va rezulta tot arborele $T^*$. \textbf{(2)}
+\newline
+\newline
+Din \textbf{(1),(2)}, pentru orice arbore partial de cost minim $T^*$ al lui $G$ in raport cu functia de cost c, exista o ordonare a muchiilor grafului $G$ pentru care algoritmul lui Kruskal returneaza $T^*$.
+ 
+\
+\section{Problema 2} 
+\
+\newline
+Fie \textit{D} = (\textit{V}, \textit{E}) un digraf tare conex de ordin n, iar  $a \colon E \to \textbf{R}$ o functie de cost pe arcele sale.
+Vom considera $A_k(v)$ costul minim al unui drum de lungime \textit{k} de la \textit{s} la \textit{v} in digraful \textbf{D}, unde \textit{s} este un nod fixat din \textbf{V} si $\textit{k} \in \textbf{N}$. Notam cu $a(\textit{X})$ costul lui X, adica suma costurilor arcelor lui \textit{X}.
+\newline
+\newline
+\textbf{a)}Considerand ca in digraful \textbf{D} nu exista circuite de cost \textit{a} negativ, dar exita un circuit \textbf{C} cu $a(C)=0$, vom demonstra ca exista un varf $\textit{v}\in\textbf{V(D)}$, astfel incat:
+$A_n(v)=min\{a(P)|P$ drum de la $s$ la $v$ in $D$ $\}$*. 
+\newline
+\newline
+Pentru a identifica drumurile minime de la nodul de start \textit{s} la v, $\forall v \in V(G)$ ne vom folosi de algoritmul lui
+\textbf{Bellman-Ford-Moore}. Algoritmul amintit se pliaza pe cerinta problemei, intrucat acesta genereaza drumurile minime de la un nod sursa la toate nodurile dintr-un graf dat, unde costurile asociate muchiilor pot avea valori reale, respectiv $a(C)\geq 0, \forall C \in G$, unde C reprezinta un circuit in graful G. 
+\newline
+\newline
+Problema se rezuma la demonstrarea faptului ca macar pentru unul dintre nodurile din graful G exista un drum \textit{P} de lungime \textit{n} de la nodul sursa \textit{s} la nodul vizat, astfel incat costul drumului identificat sa fie egal cu valoarea costului drumului minim catre respectivul nod.
+Asadar, ca punct de plecare al demonstratiei, presupunem ca nu exista niciun nod pentru care are loc proprietatea de mai sus.
+\
+\newline
+\newline
+Relatiile de care ne vom folosi in cadrul demonstratiei fac parte din cadrul algoritmului \textbf{Bellman-Ford-Moore}:
+
+\begin{center}{$u_{0,s} = 0$; $u_{0,i} = \infty$; $u_{k+1,i} = min(u_{k,i}, \underset{j \in incident(i)}{min}(u_{k,j} + a_{ji})), \forall i  \neq s$ }
+\end{center}
+\	
+Pentru determinarea drumului de	cost minim ne vom raporta la urmatoarea relatie:
+\begin{center} {$w_{0,s}=0;
+			w_{0,x}=\infty$; 
+			$w_{k+1,x}=\underset{y \in incident(x)}{min}(w_{k,y}+a_{yx}), \forall x \neq s$}
+\end{center}
+\
+\newline
+Intr-un graf orientat se defineste un \textbf{drum} ca fiind o succesiune de noduri care au proprietatea ca, oricare ar fi doua noduri succesive, ele sunt legate printr-un arc. Un \textit{drum de lungime minima} este un drum care contine numarul minim de arce din multimea nevida de drumuri dintre 2 noduri prestabilite. O definitie alternativa este aceea conform careia un drum este un mers in care muchiile sunt disticte.
+Luand in considerare faptul ca ne aflam in digraful \textit{D}, repetarea unor arce in parcurgere, ne indica in mod concret ca ne aflam intr-un \textbf{circuit}. Avand in vedere ca valoarea costului unui circuit este 0($a(C)=0$), este evident ca un mers cu circuit va avea costul mai mare sau egal decat a unui drum. Asadar, raportandu-ne la situatia generala, putem deduce ca pentru orice mers cu circuit, acesta va avea cu siguranta costul mai mare sau egal cu drumul minim pana la nodul prestabilit v, unde $v \in V(G)$.
+\
+\newline
+\newline
+Prin raportare la concluziile anterioare, un mers de lungime \textit{n} poate parcurge un circuit \textit{C}, unde $a(C)=0$, iar in afara circuitului, acesta reprezinta drumul de cost minim de la nodul sursa \textit{s} la un nod \textit{v}, unde $v \in V(D)$. Ceea ce avem de facut in momentul de fata este identificarea unui drum de cost minim P, unde restul impartirii lungimii drumului P la n va da restul 1( lg(P) congruent modulo 1 cu n). Conditia este ca drumul sa contina printre elementele sale un nod care se afla pe \textit{circuitul C}.
+\
+\newline
+\newline
+Consideram \textit{t} unul din nodurile care se afla pe \textit{circuitul C}. Fie $u_{l_t, t}$ drumul de cost minim pornind din nodul sursa s\textit{s}. Un mers care satisface conditia impusa, va concatena drumul de la nodul sursa \textit{s} la \textit{t}, indiferent de cate parcurgeri succesive ale circuitului \textit{C} exista. Prin urmare, vom adauga un numar \textit{k} de parcurgeri ale circuitului \textit{C} incepand din nodul \textit{p}, astfel incat $l_t + k*l \geq n$, cu k minim. Asadar, vom avea un mers de cost minim intre nodurile \textit{s} si \textit{t}. 
+Asociem prefixul acestui mers care va avea ca punct de oprire cel de-al (n+1)-lea element al sau. Fie elementul de pe pozitia (n+1) nodul v, unde $v \in V(D)$. Consideram adevarata afirmatia conform careia un prefix al unui mers de cost minim reprezinta si el un mers de cost minim. Asadar, in cazul de fata, prefixul identificat va avea costul minim asociat drumului dintre \textit{s}, respectiv \textit{v}.
+\
+\newline
+\newline
+Prin mentionarea aspectelor de mai sus, putem conchide ca problema a fost rezolvata, mersul cerut a fost identificat, iar varful \textit{v} exista proprietatea  $A_n(v)=min\{a(P)|P$ drum de la $s$ la $v$ in $D$ $\}$* fiind satisfacuta.. 
+\newline
+\newline
+\textbf{b)} Pentru rezolvarea cerintei, consideram $lg(X)$-numarul de arce din X, respectiv $a_{avg}(x)$=$\frac{a(X)}{lg(X)}$. Pornind de la $(a_{avg})^*=0$, trebuie sa demonstram ca:
+\begin{equation}
+(a_{avg})^* = \underset{v \in V}{min} \underset{0 \leq k \le n-1}{max}\frac{A_n(v) - A_k(v)}{n-k} 
+\end{equation}
+Pentru a fi indeplinita relatia, luand in considerare valoarea lui $(a_{avg})^*$, deducem ca valoarea raportului va fi egala cu 0, doar in cazul in care $A_n(v)$-$A_k(v)$=0, asta tinand cont si de faptul cu numitorul este nenul. Stim ca k$<$n, deci vor exita 2 drumuri de acelasi cost, dar cu lungimi diferite, fapt ce implica ca o parte din muchiile care compun drumul de la nodul de start la v sa aibe asignate costuri nule.
+\newline
+\newline
+Deoarece din ipoteza subpunctului \textbf{b)} $(a_{avg})^*=0$ inseamna ca exista un circuit al carui cost mediu este 0. Vom nota cu $r$-lungimea corespunzatoare drumului de cost minim din nodul de start $s$, $u_{r,v} = w_{r,v}$ (drumul minim este si mersul minim de lungime k, tinand cont si de algoritmului Bellman-Ford-Moore). Prin urmare, cum pentru alegerea lui $v$ s-ar respecta $w_{n, v} = u_{r,v}$, am avea $w_{n,v}-w_{r,v}=0$.
+\newline
+\newline
+Notam faptul ca prin definitie, $u_{r,v} =
+\underset{0 \leq k \le n-1}{min}A_k(v)$ (drumul de cost minim este minimul mersurilor de cost minim dupa lungime). Deci $0 = w_{n,v}-w_{r,v} = \underset{0 \leq k \le n-1}{max}(A_n(v) - A_k(v)) \geq 0 $ (deoarece $A_k(v) \geq u_{r,v}$).
+\newline
+\newline
+Vom considera ca egalitatea va fi indeplinita daca vom alege cazul particular $k=r$, adica lungimea drumul de cost minim va fi $k$. In acest mod, relatia {$(a_{avg})^* = \underset{v \in V}{min} \underset{0 \leq k \le n-1}{max}\frac{A_n(v) - A_k(v)}{n-k} = 0$} este satisfacuta. \textbf{q.e.d.}
+\newline
+\
+\newline
+\textbf{c)} Stiind ca $(a_{avg})^*$ $\neq$ 0, vom modifica functia care asigneaza costul muchiilor in urmatoarea maniera: din costurile vechi ale muchiilor vom scadea $x=(a_{avg})^*$. Deci, noua functia de cost $a'$ va fi egala cu $a-(a_{avg})^*$. Pentru aceasta alegere aduce urmatoarele argumente: 
+\newline
+\newline
+Pentru ca relatia (MMC) sa fie satisfacuta, este necesar ca $(a'_{avg})^*=0$.
+\newline 
+Dar $(a'_{avg})^*=\min\nolimits_{C\ circuit\ in\ D} a'_{avg}(C)$ este costul mediu minim al unui circuit in $D$. Alegand circuitul de cost minim pentru a, observam ca pentru noua forma propusa pentru functia a, constanta $x$ pe care o scadem din functia de cost a va fi direct proportionala cu $n-k$, rezultand ca termen singular in relatia (MMC):
+\begin{center}
+{$\frac{A'_n(v) - A'_k(v)}{n-k} = \frac{A_n(v) - n*(a_{avg})* - A_k(v) + k*(a_{avg})^*}{n-k} = \frac{A_n(v) - A_k(v) - (n-k)*(a_{avg})^*}{n-k} = \frac{A_n(v)-A_k(v)}{n-k} - (a_{avg})^*$}
+\end{center} 
+Identificand circuitul de cost minim D, vom calcula noul cost mediu minim $(a'_{avg})^*$. $a(D)=k\cdot a_{avg}$ iar $a'(D)=k \cdot a_{avg} - k \cdot a_{avg}=0$ unde $a_{avg}= \underset{v \in V}{min} \underset{0 \leq k \le n-1}{max}\frac{A'_n(v) - A'_k(v)}{n-k} = \underset{v \in V}{min} \underset{0 \leq k \le n-1}{max}\frac{A_n(v) - A_k(v)}{n-k}-(a_{avg})^*)$ acest lucru rezultand si conform subpunctului \textbf{b)} unde $(a_{avg})^* = \underset{v \in V}{min} \underset{0 \leq k \le n-1}{max}\frac{A_n(v) - A_k(v)}{n-k} =0$ deci si $(a'_{avg})^*$=0, iar aceasta este conditia necesara pentru satisfacerea relatiei (MMC). Astfel transformarea functiei de cost $a$ in noua functie $a'=a-(a_{avg})^*$, egalitatea (MMC) corespunzatoarea functiei de cost $a'$ va avea loc.
+\newline
+\newline
+Faptul ca (MMC) se va respecta pentru orice functie de cost $a$ este indeplinit deoarece functia de cost $a$ a fost modificata prin scaderea unei valori reale, constante, valoare ce este independenta de variabile adignate circuitelor din digraf sau digrafului insusi (spre exemplu, variabile ca $n$ sau $k$). Faptul ca se scade o constanta reala nu particularizeaza functia, ci o face sa isi mentina generalitatea. 
+\
+\section{Problema 3}
+\
+\newline
+Pentru a demonstra ca problema \textbf{P} se reduce in timp polinomial la testarea daca macar unul din grafurile $G_{rosu}$ sau $G_{verde}$ are cuplaj perfect, vom analiza, mai intai, complexitatea pasilor de constructie ale grafurilor $G_c$ unde $c \in \{$rosu, verde$\}$.
+\newline
+\newline
+Pasul \textbf{\textit{i}}, reprezentativ pentru construirea grafurilor de tipul $H=K_2$ x $(G-\{s,t\})$. Orice varf din multimea $G-\{s,t\}$, va fi reprezentat de alte 2 varfuri nou construite, de forma $(rosu, v)$ si $(verde,v)$, varfuri care vor fi incidente. Ne vor rezulta astfel doua grafuri $H_1$ si $H_2$ in care $\forall x \in V(H_1), (rosu, x) \in E(H_1)$ si $|V(H_1)|=|G-\{s,t\}|=n-2$, tinand cont de faptul ca $|V(G)|=n$, si $\forall y \in V(H_2), (verde, y) \in E(H_2)$ si $|V(H_2)|=|G-\{s,t\}|=n-2$, $H_1$ si $H_2$ fiind 2 partitii ale grafului $H$. $H$ devine astfel un graf bipartit, iar prin faptul ca orice 2 noduri de forma $(rosu, v)$ si $(verde,v)$ sunt incidente, va exista atfel in $H$ un cuplaj perfect, $H$ avand toate nodurile saturate, $S(M)=V(H)$, unde $M$-cuplaj. Acesta constructie se va realiza in timp polinomial $O(|V(G)|^2)=O(n^2)$ fiind necesara parcurgerea muchiilor grafului.
+\newline
+\newline
+Urmatorul pas de constructie, \textbf{\textit{ii}}, asigura clasificarea muchiilor din $G$ in cele doua noi subgrafuri $H_1$ si $H_2$, in functie de culoarea ce le-a fost atribuita, dar si mentinerea culorilor din G. Acest pas urmareste ca muchiile $uv$ sa nu aiba 2 culori diferite in acelasi subgraf. Mai concret, daca muchia $uv \in E_{rosu}(G)$, atunci muchia $(rosu, u)(rosu,v)$ va exista in subgraful $H_1$ ce contine noduri de forma $(rosu, x), x\in V(H_2)$, iar muchia $(verde,u)(verde,v)$ va fi stearsa din subgraful $H_1$. Pentru fiecare muchie din $G$, se verifica atributul ei cromatic si se va sterge din unul dintre subgrafuri $H_1$ sau $H_2$ muchia necorespunzatoare caracteristicilor partitiei din care este apartenenta. 
+\newline
+\newline
+Parcurgerile grafului $G$ dar si ale subgrafurilor $H_1$ si $H_2$ se pot realiza concomitent doar prin parcurgerea muchiilor grafului $G$. Acest lucru este posibil prin prisma faptului ca cele doua subgrafuri au fost contruite avand la baza nodurile grafului $G$, deci printr-o simpla parcurgere a muchiilor grafului $G$, putem face referinta atat la muchiile grafului initial cat si la muchiile din cele doua subgrafuri fara costuri suplimentare de timp. Grafurile $G-\{s,t\}$, $H_1$ si $H_2$ sunt izomorfe, lucru  mai mult decat evident, deci cum vizitam 3 grafuri izomorfe simultan, o tranzitie la o muchie noua ar insemna 3 tranzitii in total.
+\newline
+\newline
+Operatia de sterge are cost unitar de timp, se realizeaza in $O(1)$, deoarece nu sunt necesare modificari suplimentare, fiind doar eliminata muchia necorespunzatoare din multimea muchiilor subgrafului respectiv. Deci si aceasta operatie se rezuma la o parcurgere a tuturor muchiilor proportionala ca timp cu parcurgerea muchiilor grafului $G$. Deci, prin cele mentionate anterior, timpul total pentru pasul \textbf{\textit{ii}} va fi tot polinomial, $O(|V(G)|^2)=O(n^2)$.
+\newline
+\newline
+Este de observat similaritatea pasilor \textbf{\textit{iii}} si \textbf{\textit{iv}}, acestia constand in adaugarea muchiilor $s(c,\ u)$ respectiv $(c,\ u)t$ care corespund muchiilor din $E(G)$ si corespondentelor lor cromatice. Se vor adauga aceste 2 muchii in asa fel incat drumul de la s la t sa fie un \textit{drum colorat}, adica prima si ultima muchie sunt de aceeasi culoare si orice doua muchii succesive de pe drum sunt de culori diferite. In fiecare din cei doi pasi, se va face verificarea pentru maxim $|V(G)|-2|$ muchii, tinand cont ca $|V(G-\{s,t\})|=n-2$. Deci  in ceea ce priveste timpul de executie acesta va fi tot polinomial, respectiv $O(|V(G)|)=O(n)$.
+\newline
+\newline
+Tinand cont de argumentele enuntate anterior, am justificat astfel faptul ca toti pasii de constructie se vor realiza in timp polinomial, in cazul cel mai nefavorabil rezultand un timp de $O(n^2)$.
+\newline
+\newline
+Acum vom demonstra ca problema \textbf{(P)} se reduce in timp polinomial la testarea daca macar unul din grafurile $G_{rosu}$ sau $G_{verde}$ are cuplaj perfect.
+\newline
+\newline
+Din enuntul problemei, un  \textit{drum colorat} de la $s$ la $t$, are ca definitie o succesiune de muchii de la $s$ la $t$, de culori alternante in care prima si ultima muchie sunt din aceesi clasa a bipartitiei si orice doua muchii succesive de pe drum sunt din clase diferite ale bipartitiei. Cum culorile pot fi simetrice, pentru exemplificare vom alege ca prima muchie ce pleaca din nodul de start $S$ sa aiba culoarea \textit{rosu}.
+\newline
+\newline
+Existenta unui astfel de drum  este echivalenta cu existenta unui drum de crestere in $G$ de la $s$ la $t$. Se numeste \textit{drum de crestere} al lui $G$ relativ la cuplajul $M$ un drum alternat cu extremitatile varfuri distincte, expuse relativ la cuplajul $M$. Comform teoremei lui \textbf{Berge 1959}, un cuplaj $M$ este de cardinal maxim in graful $G$ daca si numai daca nu exista in $G$ drumuri de crestere relativ la $M$.
+\newline
+\newline
+Va exista un drum colorat in $G$ intre $s$ si $t$ daca si numai daca avem un cuplaj perfect in subgraful $G_{rosu}$. Alegerea arbitrara a primei si a ultimei muchii de culoare rosie, facuta anterior, va determina ca numarul de muchii rosii din drumul de crestere sa fie mai mare cu 1  fata de numarul de muchii verzi.
+\newline
+\newline
+Pasii \textbf{\textit{i}} si \textbf{\textit{ii}} conduc la obtinerea unui graf ce are $2n$ noduri in care poate fi regasit un cuplaj perfect de marime $n$ dat de muchiile $(rosu,v)(verde,v)$, $\forall v \in V(G)$. Iar pentru urmatorii pasi,  \textbf{\textit{iii}} si \textbf{\textit{iv}}, se vor adauga muchiile asociate lui $s$ si lui $t$ avand culoarea corespunzatoare. 
+\newline
+\newline
+Pentru implicatia directa, \textbf{$"\Longrightarrow"$}, in $G_{rosu}$ drumul colorat va fi de forma $s(rosu, v_1)\longrightarrow(rosu, v_1)(verde,v_1)\longrightarrow(verde, v_1)(verde,v_2)\longrightarrow...\longrightarrow(verde,v_k)(rosu, v_k)\longrightarrow(rosu, v_k)t$.  Se poate observa ca excluzand muchiile exterioare (cele care sunt incidente cu $s$ si $t$), drumul are un cuplaj perfect sau 1-factor. Adaugand cele 2 muchii eliminate anterior la un cuplaj perfect, sustine faptul ca drumul colorat va deveni astfel un drum de crestere. Nodurile $s$ si $t$ sunt expuse. Prin adaugarea unei muchii la cuplajul obtinut, prin faptul ca acesta era perfect si avem 2 noduri expuse, adaugarea unei muchii va genera un alt cuplaj perfect, de marime $n+1$.Cuplajul va fi perfect deoarece satureaza toate varfurile grafului $G$ si datorita faptului ca $G_{rosu}$ este de ordin $2n+2$, va fi exact dublul cuplajului gasit anterior.
+\newline
+\newline
+Implicatia reciproca, \textbf{$"\Longleftarrow"$} consta in a presupune existenta unui cuplaj perfect, si vom alege in mod arbitrar $G_{rosu}$. Consideram deci muchiile incidente in $s$ si $t$ ca fiind acoperite de acest cuplaj, acesta saturand toate nodurile de pe parcursul drumului, $s$ fiind nodul de start si $t$ fiind nodul terminal. Existenta cuplajului perfect este un argument mai mult decat suficient pentru argumentarea existentei drumului colorat, alternanta de cuplat-necuplat ajutand la construirea unui drum alternat al lui $G$ relativ la cuplajul $G_{rosu}$.
+\newline
+\newline
+Prin cele enuntate anterior, am demonstrat ca problema \textbf{P} se reduce in timp polinomial la testarea daca macar unul din grafurile $G_{rosu}$ sau $G_{verde}$ are cuplaj perfect. \textbf{(q.e.d)}
+
+\
+\section{Problema 4}
+\   
+\newline
+Consideram \textit{G}=(\textit{S}, \textit{T}; \textit{E}) un graf bipartit. Dorim sa demonstram ca graful \textit{G} are un subgraf partial in care orice varf din \textit{S} are gradul \textit{k}($k \in  \mathbb{Z}_{\geq 0}$) si orice nod din \textit{T} are gradul cel mult 1, daca si numai daca conditia este indeplinita: 
+\begin{center}
+\begin{itemize}
+\item	($k \cdot H$) $\hspace{25pt}$ $\mid N_G(A)\mid$ $\geq$ $k \mid A\mid$
+\end{itemize}
+\end{center}
+Pentru a putea demonstra cele enuntate mai sus, vom recurge la utilizarea teoremei lui Hall, care ne va conduce la rezultatul vizat.
+\newline
+\newline
+Fie \textit{G} un graf bipartit si \textit{S}, respectiv \textit{T}, partitiile sale. Un cuplaj de ordin \textit{k} in \textit{G} este o submultime \textit{M}, unde $\textit{M} \in \textit{E(G)}$, astfel incat $\forall v \in S$, v este incident cu exact \textit{k} muchii din multimea \textit{M} si $\forall w \in T$, unde  w este incident cu maxim o muchie din multimea \textit{M}. 
+Fie \textit{G} un graf bipartit fara noduri izolate. Spunem ca \textit{G} are un cuplaj de ordinul \textit{k} care satureaza nodurile din \textit{S} in \textit{T}, daca si numai daca satisface conditia lui Hall de ordinul \textit{k} in \textit{S}.
+\newline
+\newline
+\textbf{Demonstratie}:
+\newline
+\newline
+\textbf{Implicatia directa}: Fie \textit{M} un cuplaj de ordinul \textit{k} in graful \textit{G}. Formam un subgraf \textit{R} al lui \textit{G}, stergand toate muchiile din G care nu se afla in M. Facem observatia ca R contine acelasi numar de noduri ca G. Astfel, M satureaza nodurile din S in T si in subgraful nou creat. In subgraful R, este de remarcat ca $\forall v \in V(R)$, v are k vecini distincti in T, iar oricare ar fi 2 noduri din S, ele nu pot avea acelasi vecin in T, prin definitia cuplajului M. Prin urmare, pentru oricare submultime A a lui S, conditia $\mid N_G(A)\mid$ $\geq$ $\mid N_R(A)\mid$ = $k \mid A\mid$ este respectata.
+\newline
+\newline
+\textbf{Implicatia inversa}:
+Vom proceda prin inductie dupa numarul de elemente din S.
+Vom considera cazul de baza: $\mid S \mid = 1$.
+Este usor de observat ca, odata ce G satisface conditia lui Hall de grad k in S, singurul nod existent in S are gradul cel putin k. Luand \textit{M} o multime de oricare k muchii distincte din graful G, incidente cu singurul nod din S, gasim astfel cuplajul cautat.
+\newline
+\newline
+Presupunem ca teorema se aplica pentru  $\mid S \mid < n$. Luam $\mid S \mid = n$, unde $n>1$. Fie $G^*$ un subgraf al lui G, avand aceeasi multime de noduri ca G. De remarcat faptul ca $G^*$ este tot un graf bipartit cu $S^*=S$ si $T^*=T$. Vom demonstra ca $G^*$ are un cuplaj care satisface $S^*$ in $T^*$ si ca acelasi cuplaj va putea fi aplicat si pe graful initial G.
+\newline
+\newline
+\textbf{Cazul 1}: presupunem ca $\exists e \in E(G^*)$, astfel incat $\exists A^* \subsetneq S^*$ si $\mid N_{G^*-e}(A^*)\mid$ $<$ $k \mid A^*\mid$. Avand deja $\mid N_{G^*}(A^*)\mid$ $\geq$ $k \mid A^*\mid$, inseamna ca $\mid N_{G^*}(A^*)\mid$ = $k \mid A^*\mid$. Acum vom crea doua subgrafuri ale lui $G^*$. Vom defini un graf bipartit $G_1^*$ ale carui partitii sunt $S_1^*=A^*$, respectiv $T_1^*=N_G(A^*)$. Definim un alt graf bipartit $G_2^*$ ale carui partitii sunt $S_2^*=S^*-S_1^*=S^*-A^*$ si $T_2^*=T^*-T_1^*$. Doua varfuri din $V(G_1^*)$ sunt adiacente in $G_1^*$, daca si numai daca aceste doua varfuri sunt adiacente in $G^*$. Similar pentru $G_2^*$. Este de remarcat ca $G_1^*$ satisface conditia lui Hall de ordin k in $S_1^*$. Deci, presupunem ca $\mid S_1^* \mid < \mid S^* \mid = n$. Deci, prin inductie, exista un cuplaj $M_1^*$ de ordin k, care satureaza $S_1^*$ in $T_1^*$ in graful $G_1^*$. Acum vom arata ca si in $G_2^*$ este satisfacuta conditia lui Hall de ordin k. Fie $Q^* \subseteq S_2^*$.  Stim ca $\mid N_{G^*}(Q^* \cup A)\mid \geq k \mid Q^* \mid + k \mid A^* \mid $.
+Daca $\mid N_{G_2^*(Q^*)}\mid < k \mid Q^* \mid $, atunci am avea $\mid N_{G^*}(Q^* \cup A)\mid < k \mid Q^* \mid + k \mid A^* \mid $, fapt ce determina o contradictie. Deci avem ca $\mid N_{G_2^*(Q^*)}\mid \geq k \mid Q^* \mid $, $\forall Q^*\subseteq S_2^*)$. Acum, cat timp avem $\mid X_2^*\mid < \mid X^*\mid = n$, atunci, prin inductie, vom avea un cuplaj $M_2^*$ de grad k, care va satura $S_2^*$ in $T_2^*$ in graful $G_2^*$. Este evident ca $M_1^* \cup M_2^*$ va fi considerat cuplajul cautat pentru $G*$, asadar si pentru G.
+\newline
+\newline
+\textbf{Cazul 2}: presupunem ca $\exists e \in E(G^*)$, astfel incat $\exists A^* \subsetneq S^*$ $\Rightarrow$ $\mid N_{G^*-e}(A^*)\mid$ $\geq $ $k \mid A^*\mid$. Fie $v \in S^*$ si $w_1, w_2, ..., w_k$ cei k vecini distincti ai nodului v. Fie $e_1 = vw_i \in E(G^*)$, Fie $j \in \{1, ..., k\}$.  Stim ca $G^*-e_j$ nu satisface conditia lui Hall in $S^*$. Dar in acest, caz, singura posibilitate $\mid N_{G^*-e_j}(S^*)\mid < k\mid S^*\mid$. Daca ar fi fost asa incat $w_j \in N_G^*(S^*-v)$, atunci am fi avut $N_{G^*-e_j}=N_{G^*}(S^*)$. Dar tinand cont ca $\mid N_{G^*}(S^*)\mid \geq k \mid S^* \mid$ am fi avut $\mid N_{G^*-e_j}(S^*)\mid \geq k\mid S^*\mid$, fapt ce conduce la o contradictie. Prin urmare $w_j \notin N_{G^*}(S^*-v), \forall j \in \{1, ..., k\}$.
+\newline
+\newline
+Scriem $M^* = \{ vw_i \in E(G^*) : i = 1, ..., k \}$. Definim un graf bipartit $G_0^*$, care satisface conditia lui Hall de grad k pe $S_0^*$. Deci, tinand cont ca $\mid S_0^* \mid < \mid S^* \mid = n$, prin inductie exista un cuplaj $M_0^*$ de ordin k, care satureaza $S_0^*$ in $T_0^*$ in $G_0^*$. Este usor de remarcat ca $M^* \cup M_0^*$ reprezinta cuplajul cautat pentru $G^*$ si totodata pentru graful initial G.
+Luand in considerare cazurile prezentate, demonstratia este completa.
+
+
+\end{document}

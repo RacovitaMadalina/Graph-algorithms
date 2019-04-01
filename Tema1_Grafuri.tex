@@ -1,0 +1,361 @@
+\documentclass{article}
+\usepackage{amsthm}
+\usepackage{amssymb, amsmath}
+\usepackage{array}
+\usepackage[romanian]{babel}
+\usepackage{bm}
+\usepackage{enumerate}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{index}
+%\usepackage{tikz}
+\usepackage{ucs}
+\usepackage[utf8]{inputenc}
+
+\geometry{
+ a4paper,
+ total={160mm,257mm},
+ left=30mm,
+ right=30mm,
+ top=20mm,
+ bottom=20mm,
+ }
+
+\begin{document}
+
+\begin{titlepage}
+
+\begin{center}
+Universitatea ``Alexandru Ioan Cuza" din Iasi\\
+Facultatea de Informatica\\
+\end{center}
+
+\vspace{80mm}
+ 
+\begin{center}
+\begin{Huge}
+\textbf{Algoritmica Grafurilor}
+\textbf{ - TEMA 1}
+\end{Huge}
+\end{center}
+ 
+\vspace{60mm}
+\begin{center}
+\begin{Large}
+\textbf{Studenti:} Buterchi Andreea, Racovita Madalina-Alina
+\newline
+\textbf{Grupa:} B2
+\textbf{Anul:} II
+\end{Large}
+\end{center}
+\vfill
+
+\end{titlepage}
+
+
+\section{Problema 1}
+\  
+\newline
+\newline
+	Vom reprezenta societatea \textbf{S} ca fiind formata din jurii, fiecare juriu constand intr-o multime stabila.
+\newline
+	O multime stabila (sau multime independenta de varfuri) este o multime $\textbf{M} \subseteq V(\textbf{S})$ de varfuri cu proprietatea ca $\textbf{P}_2 (\textbf{M})\cap E(\textbf{S}) =\emptyset$ (adica o multime de varfuri neadiacente doua cate doua). Adaptand aceasta definitie in cazul juriilor, $\forall i,i' \in \textbf{S}, i \not \in c(i')$ si $i \not \in c(i)$.
+\newline
+\newline
+    Vom modela societatea cu ajutorul unui digraf deoarece daca un individ $i$ cunoaste individul $i'$ atunci $i'$ nu este neaparat sa il cunoasca pe $i$. Ei nu vor face parte din acelasi juriu, insa faptul ca un individ cunoaste un altul ne va ajuta in estimarea gradelor externe ale nodurilor digrafului. 
+\newline  
+\newline  
+    Ne propunem sa demonstram ca cromatul digrafului \textbf{S}  este $\chi(\textbf{S})=2k+1$, unde $2k+1$ este cea mai mica valoare a lui  $p \in \mathbb{N}^* $ pentru care \textbf{S} admite o $p$-colorare.
+    \newline
+    Deoarece fiecare individ $i \in \textbf{S}$ cunoaste cel mult $k$ indivizi, adica $|c(i)|\leq k $ atunci gradul extern al fiecarui nod va fi maxim $k$, $d^+ (i) \leq k$.
+    \newline
+    \newline
+    Vom demonstra prin inductie ca daca avem o societate \textbf{S} cu $|\textbf{V}(\textbf{S})|=n$ in care $\forall i \in \textbf{S}$, $d^+ (i) \leq k$, atunci cromatul acesteia este $\chi(\textbf{S})=2k+1$.
+    \newline
+    \newline
+    $P(n)$ : "Daca $\forall i \in \textbf{S}$, $d^+ (i) \leq k$, atunci $\chi(\textbf{S}) \leq 2k+1$, $\forall \textbf{S}$ in care $|\textbf{V}(\textbf{S})|=n$, $n \in \mathbb{N}^*$."
+    \newline
+    \newline
+    1) Verificare pentru $k=0$. 
+    \newline
+    In acest caz toate nodurile sunt izolate, $\forall i \in \textbf{S}$, $d^+ (i)=0$, deci fiecare juriu va fi format dintr-un singur individ.
+    Cromatul, $\chi(\textbf{S})=2*0+1=1$, ceea ce verifica, deoarece avem nevoie doar de o singura culoare pentru a colora toate multimile stabile de cardinal 1.
+    \newline
+    \newline
+    2)Presupunem $P(q)$ adevarata.
+    \newline
+    $P(q)$ : "Daca $\forall i \in \textbf{V}(\textbf{S})$, $d^+ (i) \leq k$, atunci $\chi(\textbf{S}) \leq 2k+1$, $\forall \textbf{S}$ in care $|\textbf{V}(\textbf{S})|=q$, $q \in \mathbb{N}^*$, $q<n$."
+    \newline
+    Demonstram ca $P(q)\rightarrow P(q+1)$.
+    \newline
+    $P(q+1)$ definit analog ca $P(q)$ in care $|\textbf{V}(\textbf{S})|=q+1$.
+     \newline
+     \newline
+    Intr-un digraf in care $d^+ (i) \leq k $, ne propunem sa aratam ca $\exists x \in \textbf{V(\textbf{S})}$ in asa fel incat $d^- (x) \leq k $. Avem in vedere ca dintr-un nod pot pleca maximal, k muchii.
+    \newline
+    \newline
+    Presupunem prin $\textbf{R.A.}$ ca $\forall x \in \textbf{V(\textbf{S})}$, $d^- (i) > k $.  
+    In orice digraf $\sum_{i \in \textbf{V(S)}} d^+ (i)=\sum_{i \in \textbf{V(S)}} d^- (i)$. 
+    Dar fiindca $d^+ (i) \leq k $, $\forall i \in \textbf{V(\textbf{S})}$, deducem ca: 
+     \begin{center}
+    $\sum_{i \in \textbf{V(S)}} d^+ (i) \leq |\textbf{V(S)}| \cdot k$
+    \end{center}
+	\begin{center}
+     $\sum_{i \in \textbf{V(S)}} d^- (i) \leq |\textbf{V(S)}| \cdot k$
+    \end{center}
+     Asadar gradul intern mediu va fi $k$. (\textbf{contradictie} $\rightarrow$ daca toate nodurile au gradele mai mari decat $k$, asa cum am presupus initial, nu vom obtine niciodata valoarea medie $k$. Deci, $\exists x \in \textbf{V(\textbf{S})}$ in asa fel incat $d^- (x) \leq k $, si proprietatea este astfel demonstrata.
+    \newline
+    \newline
+    Pentru $|\textbf{V}(\textbf{S})|=q+1$, avand in vedere ca pentru $\forall i \in \textbf{V}(\textbf{S})$, $d^+ (i) \leq k$, vom elimina nodul $x$ cu proprietatea gasita anterior.
+    \newline
+    \newline
+    Vom nota acest subgraf nou obtinut cu $\textbf S'$. In acest mod, ne va ramane un digraf in care $\forall i \in \textbf{V}(\textbf{S}')$, $d^+ (i) \leq k $, lucru care din ipoteza inductiva va genera $\chi(\textbf{S}') \leq 2k+1$.
+    Reconstruim \textbf{S}, adaugand nodul $x$. Despre acesta stim ca:
+    \begin{center}
+    $ d^- (x) \leq k $
+     \end{center}
+    \begin{center}
+    $ d^+ (x) \leq k $
+    \end{center}
+    Adunand cele doua inegalitati obtinem relatia:
+    \begin{center}
+    $ d^- (x) + d^+ (x) \leq 2k $
+    \end{center}
+    Asadar nodul $x$ va avea $2k$ vecini, care datorita colorabilitatii si a adiacentelor initiale ar trebui sa aiba culori diferite fata de $x$. Deoarece suntem interesati de proprietati maximale, deducem ca cei $2k$ vecini sunt colorati cu $2k$ culori.
+    \newline 
+    Deci pentru a recrea adiacentele din digraful initial \textbf{S} va trebui sa adaugam o noua culoare. Cum $2k<n$ deoarece in caz maximal nodurile sunt izolate si avem $2k+1$ culori $\rightarrow$ vom folosi o culoare existenta, ce coloreaza unul dintre cele $n-2k$ noduri ramase. Prin urmare, $\chi(\textbf{S}) \leq 2k+1$, $\forall \textbf{S}$, in care $|\textbf{V}(\textbf{S})|=q+1$ si $P(q+1)$ este astfel demonstrata.
+    \newline
+    \newline
+    \textbf{Concluzie}
+    Conform metodei inductiei matematice, am demonstrat ca intr-o societate \textbf{S}, $\forall i \in \textbf{S}$ cu $d^+ (i) \leq k$, vom avea $\chi(\textbf{S}) \leq 2k+1$, $\forall \textbf{S}$ unde $|\textbf{V}(\textbf{S})|=n$, $n \in \mathbb{N}^*$. (\textbf{q.e.d.})
+
+\section{Problema 2} 
+\
+\newline
+\textbf{a)}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.7]{grafuri1.jpg}
+\end{figure}
+\newline
+\textbf{b)} Vom demonstra ca \textbf{$D_n$}, $\forall n \geq 2 $ este tare conex. Observam ca exista un sablon repetitiv in listele de adiacenta a nodurilor, avand ca fundament shiftarile la stanga: $\forall x,y \in \{0,1\}^n, xy \in E(D_n)  \leftrightarrow (x_1,x_2,...., x_n)=(y_1, y_2,...., y_n)$.
+\newline
+In cazul lui \textbf{$D_3$} notam nodurile scrise in ordine strict crescatoare, dupa semnificatia lor binara: $000 \rightarrow (1), 001 \rightarrow (2),010 \rightarrow (3),011 \rightarrow (4),100 \rightarrow (5),101 \rightarrow (6),110 \rightarrow (7),111 \rightarrow (8)$.
+\newline
+Lista de adiacenta pentru \textbf{$D_3$} va fi urmatoarea: 
+\begin{center}
+$1: 1,2$ \ \ \ \ \ \ \ $5: 1,2$
+\end{center}
+\begin{center}
+$2: 3,4$ \ \ \ \ \ \ \ $6: 3,4$
+\end{center}
+\begin{center}
+$3: 5,6$ \ \ \ \ \ \ \ $7: 5,6$
+\end{center}
+\begin{center}
+$4: 7,8$\ \ \ \ \ \ \ \ $8: 7,8$
+\end{center}
+Deoarece in $\textbf{$D_3$}$,$d^+(i)=d^-(i)=2$,  $\forall i \in \overline{1,8}$ $\rightarrow$ fiecare nod va aparea de exact doua ori in dreapta listelor de adiacenta. Observam, de asemenea, ca listele de adiacenta a primei jumatati de noduri din $V(D_3)$ sunt identice cu listele celei de a doua jumatati. 
+\newline
+\newline
+La cazul general, partitionam nodurile digrafului $D_n$ in doua jumatati. In prima jumatate nodurile care au primul bit, $x_1=0$, in cea de a doua jumatate nodurile care au primul bit, $x_1=1$.
+\begin{center}
+$1 \rightarrow (00...0): 1,2$ \ \ \ \ \ \ \ $5 \rightarrow (10...0) :  1,2$
+\end{center}
+\begin{center}
+$1 \rightarrow (00...1): 3,4$ \ \ \ \ \ \ \ $6 \rightarrow (10...1) :  3,4$
+\end{center}
+\begin{center}
+$.................................................................$
+\end{center}
+\begin{center}
+$k \rightarrow (01...1): 2k,2k-1$ \ \ \ \ \ \ \ $2^n-k \rightarrow (11...1) :  2k-1 -2^n, 2k-2^n$
+\end{center}
+\begin{center}
+$\forall k \in \overline{2^0, 2^n}$
+\end{center}
+Acest lucru ne asigura faptul ca fiecare nod va aparea de 2 ori in dreapta listelor de adiacenta $\rightarrow$ $d^+(i)=d^-(i)=2$, $\forall i \in \overline{1,2^n}$. \textbf{(1)}
+\newline
+\newline
+Pentru a demonstra ca graful este tare conex, vom demonstra ca $\exists$ un drum D de la $x$ la $y$, $\forall x,y \in \{1,0\}^n$, varfuri ale digrafului $D_n$.
+\newline
+\newline
+Presupunem prin \textbf{R.A.} ca $D_n$ nu este tare conex, deci ca $\exists x,y \in \{1,0\}^n$ pentru care nu avem un drum D de la $x$ la $y$.
+\newline
+Vom alege arbitrar doua noduri $x=(x_1,x_2,...,x_n)$, $y=(y_1,y_2,..., y_n)$, unde $x,y \in D_n$ si $x_i \in \{0,1\} , y_i \in \{0,1\}$
+Nodul $x=(x_1,x_2,...,x_n)$ va fi adiacent cu nodurile $(x_2,x_3,...,x_n, 0)$ si $(x_2,x_3,...,x_n, 1)$ (datorita shiftarilor la stanga). Dar cum $y_1 \in \{0,1\}$, putem rescrie, fara a modifica, continutul problemei,ca $x=(x_1,x_2,...,x_n)$ este adiacent cu $(x_2,x_3,...,x_n, y_1) \in \{(x_2,x_3,...,x_n, 0),$ $(x_2,x_3,...,x_n, 1)\} $. 
+\newline
+La pasul al doilea, $(x_2,x_3,...,x_n, y_1)$ va fi adiacent cu $(x_3,x_4,...,y_1, 0)$ si $(x_3,x_4,...,y_1, 1)$, dar $y_2 \in \{0,1\}$
+deci $(x_2,x_3,...,x_n, y_1)$ este adiacent cu $(x_3,x_4,...,y_1, y_2) \in\{(x_3,x_4,...,y_1, 0),(x_3,x_4,...,y_1, 1)\}$.
+\newline
+Dupa $n-1$ pasi, $(x_n,y_1,...,y_{n-2}, y_{n-1})$ va fi adiacent cu 
+$(y_1,y_2,...,y_{n-1}, y_n) \in \{(y_1,y_2,...,y_{n-1}, 0),$ $(y_1,y_2,...,y_{n-1}, 1) \}$ si am gasit astfel un drum de la $x$ la $y$ pentru $\forall x,y \in \{0,1\}^n$. (\textbf{contradictie}) $\rightarrow$ Presupunerea facuta este falsa.
+\newline
+$\rightarrow$ $\exists$ un drum D de la $x$ la $y$, $\forall x,y \in \{1,0\}^n$, varfuri ale digrafului $D_n$ $\rightarrow$ digrafului $D_n$ este tare conex. \textbf{(2)}
+\newline
+\newline
+Din relatiile \textbf{(1),(2)} $\rightarrow D_n$ contine un parcurs eulerian inchis.
+\newline
+\newline
+\textbf{c)}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.7]{grafuri2.jpg}
+\end{figure}
+\newline
+Fie $D_n$-digraf si $L(D_n)$ line digraf-ul asociat lui $D_n$. Este de mentionat faptul ca fiecare nod al line digrafului este corespunzator unei muchii din $D_n$. In line digraf vom avea o muchie orientata de la nodul $x$ la $y$, unde $xy$ apartin de $E(L(D_n))$, daca extremitatea finala a lui $x$ este extremitatea initiala a lui $y$. Vom considera un exemplu concret aplicat pe digraful $D_2$, iar prin transformarile mentionate anterior, vom obtine chiar digraful $D_3$, deci proprietatea $D_{n+1}=L(D_n)$ este  astfel justificabila.
+\newline
+\newline
+\textbf{Exemplu de constructie pentru $L(D_2)$:} Notam muchiile din $D_2$ in mod arbitrar si stabilim adiacentele in noul digraf ulterior. Extremitatea finala a muchiei $a$ va fi extremitate initiala tot pentru muchia $a$ dar si pentru muchia $b$. Deci muchiile in $L(D_3)$ vor fi $aa, ab$. Analog, in cazul celorlalte muchii.
+\newline
+\newline
+Pentru a demonstra izomorfismul dintre aceste structuri, vom face analogii, sistematic, cu numarul de noduri, numarul de muchii obtinute, respectiv cu gradele fiecarui nod.
+\newline
+\newline
+Doua grafuri, $D_{n+1}=(V(D_{n+1}), E(D_{n+1}))$ si $L(D_n)=(V(L(D_n)), E(L(D_n)))$ se numesc izomorfe si notam aceasta prin $D_{n+1} \cong L(D_n)$ daca exista o bijectie $\varphi : V(D_{n+1}) \rightarrow V(L(D_n))$ cu propritatea ca aplicatia $\psi: E(D_{n+1}) \rightarrow E(L_n)$ definita pentru orice $uv \in E(D_{n+1})$ prin $\psi(uv)=\varphi(u) \cdot \varphi(v)$ este o bijectie. (deci, doua grafuri sunt izomorfe daca exista o bijectie intre multimile lor de varfuri care induce o bijectie intre multimile lor de muchii).
+\newline
+\newline
+Numarul de noduri al digrafului $D_n$ este $2^n$. In $L(D_n)$ numarul de noduri este egal cu $|E(L(D_n))| \cdot 2=2 \cdot |V(D_n)|=2 \cdot 2^n= 2^{n+1}$ deoarece ne raportam la faptul ca fiecare nod in $D_n$ are gradul extern $2$, muchii ce in urma tranzitiilor devin noduri in $L(D_n)$. Prin urmare, $|V(D_{n+1})|=|V(L(D_n))|$. Deci, $\forall i,j \in V(D_{n+1})$ astfel incat $i=j$ ne rezulta doar ca $\varphi(i)=\varphi(j)$ (asociem in mod unic fiecarui nod din $D_{n+1}$ cate un nod din $L(D_n)$). $\rightarrow \varphi$ este \textbf{injectiva}.
+De asemenea, $\forall i\in V(D_{n+1}), \varphi \in V(L(D_n))=$ codomeniul (Fiecarui nod din $D_{n+1}$ ii este asociat un nod in $L(D_n)$) $\rightarrow \varphi$ este \textbf{surjectiva}.
+\newline
+Datorita injectivitatii si surjectivitatii, $\varphi$ este \textbf{bijectiva}.\textbf{(3)}
+\newline
+\newline
+Conform subpunctului \textbf{b)}, $d^+(i)=d^-(i)=2$, $\forall i \in \overline{1,2^n}$, fapt ce va determina ca numarul de muchii din $D_{n+1}$ ($n \rightarrow n+1$) sa fie $|E(D_{n+1})|=2 \cdot |V(D_{n+1})|= 2^{n+2}$. Iar $|E(L(D_n))|= 2 \cdot |V(L(D_n))|= 2 \cdot 2^{n+1}= 2^{n+2}$. Deci, $|E(L(D_n))|=|E(D_{n+1})|$. 
+\textbf{(4)}
+\newline
+\newline
+In $D_{n+1}$, $d^+(i)=d^-(i)=2$, $\forall i \in \overline{1,2^n}$. In $L(D_n)$, datorita tranzitiilor noduri $\rightarrow$ muchii pornind de la $D_n$ si tinand cont ca fiecare nod din $D_n$ are gradul extern 2, in urma transformarilor fiecare nod al line digrafului va avea gradul extern tot $2$. ($\forall i,j \in V(D_n), ij \in E(D_n),$ extremitatea finala a muchiei $ij$ va fi extremitate intiala pentru alte 2 muchii, ceea ce va forma un nod cu grad extern 2 in $L(D_n)$). 
+\newline
+Analog pentru gradele interne, extremitatile initiale ale unei muchii $ij \in E(D_n),$ vor fi extremitati finale pentru alte doua muchii $\rightarrow$  $d^-(i)=2$). Asadar, $d^+(i)=d^-(i)=2$ atat in $D_{n+1}$ cat si in $L(D_n)$. \textbf{(5)}
+\newline
+\newline
+Fiindca $L(D_n)$ este line graf atunci el este hamiltonian, adica $\exists$ un circuit $C$ care trece prin fiecare varf al grafului o singura data. (\textbf{teorema}) $\rightarrow L(D_n)$ este tare conex.
+\newline
+\newline
+Din \textbf{b)} $D_{n+1}$ este eulerian si implicit tare conex, deoarece el contine un parcurs inchis care trece prin fiecare muchie a grafului ($\forall$ o muchie are o unica aparitie).
+\newline
+Deci, $\forall u,v \in E(D_{n+1})$ astfel incat $u=v$ ne rezulta doar ca $\psi(i)=\psi(j)$ (asociem in mod unic fiecarei muchii din $D_{n+1}$ cate o muchie din $L(D_n)$). $\rightarrow \psi$ este \textbf{injectiva}.
+De asemenea, $\forall i\in E(D_{n+1}), \psi \in E(L(D_n))=$ codomeniul (Fiecarei muchii din $D_{n+1}$ ii este asociata o muchie in $L(D_n)$) $\rightarrow \psi$ este \textbf{surjectiva}.
+\newline
+Asadar, datorita egalitatii de grade, a proprietatii \textbf{(4)}, si a celor 2 proprietati demonstrate anterior, deducem ca $\psi: E(D_{n+1}) \rightarrow E(L_n)$, $\psi(uv)=\varphi(u) \cdot \varphi(v)$ este o bijectie.
+\newline
+\newline
+$\rightarrow$  $D_{n+1} \cong L(D_n)$ si izomorfismul este astfel demonstrat.
+\newline
+Avand ca fundament aceasta proprietate, $\forall n \geq 3$, construind   $L(D_3)$, iar apoi $L(L(D_3))$ s.a.m.d. vom obtine toata familia de digrafuri $D_n$. Deci, $\forall n \geq 3$, $D_n$ este line graf $\rightarrow$ admite \textbf{un circuit hamiltonian}. (\textbf{q.e.d.})
+
+\section{Problema 3}
+\
+\newline
+\newline
+Vom considera ca punct de plecare al demonstratiei informatiile existente in cerinta problemei. Asadar, pornind de la faptul ca graful $\textit{G}=(V(G), E(G))$ este cordal, vom demonstra ca \textit{H}, graful care contine in varfuri toate drumurile de la \textit{s} la \textit{t} de lungime \textit{d}, unde $s, t \in V(G)$, va fi conex si va avea diametrul cel mult $\textit{d-1}$. 
+\newline
+\newline
+Un graf \textit{G} este considerat \textbf{cordal} sau \textbf{triangulat} daca $\forall  \textbf{C}$-circuit din componenta sa, de lungime cel putin 4, are o \textit{\textbf{coarda}}(o muchie care uneste oricare 2 noduri neadiacente din acel circuit). 
+\
+\newline
+\newline
+In cele ce urmeaza ne vom axa pe demonstrarea aspectelor mentionate mai sus.
+Fie doua noduri \textbf{P} si \textbf{Q} din graful \textit{\textbf{H}} de forma $\textbf{P}=u_0, u_1, u_2...u_d$, respectiv $\textbf{Q}=v_0, v_1, v_2...v_d$, care reprezinta drumurile de la nodul \textbf{s} la nodul \textbf{t} in graful \textit{G}. Doua noduri in graful \textit{H} vor fi adiacente doar in cazul in care se respecta proprietatea, conform careia multimile de varfuri $V(P)$, respectiv $V(Q)$ difera printr-un singur varf. Avand in vedere acest aspect, vom trece la formalizarea acestor notiuni. 
+\newline
+\newline
+Raportandu-ne la imaginea atasata  (\textbf{Figura 1}) vom face anumite observatii care ne vor ajuta la demonstratia ulterioara. Putem observa foarte usor ca graful \textit{G} este \textbf{cordal}. Sa presupunem ca nodul $\textit{s}=1$, respectiv nodul $\textit{t}=6$, astfel, varfurile grafului \textit{H}, vor fi formate din drumurile de la nodul 1 la nodul 6. Fie nodul $\textbf{P}=1, 2, 5, 6$ si nodul $\textbf{Q}=1, 3, 5, 6$. Aceste doua noduri vor fi adiacente in graful \textit{H}, deoarece difera printr-un singur varf, referindu-ne la perechea (2,3). Aceste lucruri fiind mentionate, putem face urmatoarea formalizare: daca $\textbf{P}=u_0, u_1..., u_d$ si $\textbf{Q}=v_0, v_1, ... v_d$, exista un indice \textbf{\textit{i}}, astfel incat $u_i \neq v_i$ si \textit{\textbf{j}}, cel mai mic indice astfel incat $j>i$ si $u_j=v_j$. Daca $j=i+1$, atunci se poate observa ca $u_i$ si $v_i$ sunt ambele adiacente cu $u_i-1$ si $u_i+1$. In cazul nostru, nodurile \textbf{2} si \textbf{3} sunt adiacente cu \textbf{1}, respectiv \textbf{5}. 
+\newline
+\newline
+Asigurandu-ne de aceste aspecte, deducem faptul ca nodurile care difera in insiruirea de varfuri din $\textbf{V(P)}$, respectiv $\textbf{V(Q)}$ vor constitui capetele unei \textbf{corzi}. Astfel, prin reuniunea drumurilor din \textbf{P} si \textbf{Q} vom obtine un circuit de lungime cel putin 4, fapt garantat din calitatea grafului \textit{G}(graf \textit{cordal}). Pentru generalizarea procesului de constructie al grafului \textit{H}, vom afirma ca pentru orice drum de la s la t avem 2 posibilitati de a alege o varianta de a continua drumul, ambele variante fiind constituite de extremitatile unei corzi \textit{c}.
+\newline
+\newline
+Astfel, prin contopirea drumurilor din graful rezultat \textit{H} vom obtine un circuit pe care il vom explora in functie de alegerea extremitatii corzii \textit{c}. Astfel, avem certitudinea ca intr-un subcircuit generat de alegerea anterioara, poate exista o alta coarda \textit{c'} cu acelasi comportament descris. 
+\newline
+\newline
+Din cele descrise mai sus, graful \textit{H} va fi conex, deoarece vor exista muchii intre oricare doua noduri ale sale, luandu-se in considerare posibilitatile de alegere a unui drum alternativ.(exista o coarda intre nodurile care sunt diferite in insiruirea de varfuri)
+\newline
+\newline
+Pentru a demonstra faptul ca diametrul este cel mult egal cu $d(s,t)-1$ , ne referim la numarul de noduri explorat. In insiruirea de noduri de la \textbf{s} la \textbf{t}, neluand in considerare extremitatile, vom avea mereu d-1 noduri. Daca exista \textbf{d-1} posibilitati de a crea drumul de la \textbf{s} la \textbf{t}, atunci cu siguranta va exista un drum in graful \textit{H} de lungime maxima \textbf{d-1}.
+\newline
+\newline
+$\rightarrow$ Acest lucru este observabil si in exeplul atasat. Lungimea drumului de la s la t este 3, iar diametrul grafului \textit{H} este 1.
+
+\begin{center}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.6]{fig1.jpg}
+\end{figure}
+\end{center}
+
+\section{Problema 4}
+\
+\newline
+Este dat un arbore ce ilustreaza structura ierarhica  a unei organizatii. Fiecare nod este etichetat in mod unic, $id(v) \in \{1,2,...,5000\}$. Orice nod poate comunica doar cu tatal sau cu fiul sau. ($\forall v, \exists$ muchie doar intre el si $boss(v)$ si el si $sub(v)$.
+\newline
+\newline
+Vom demonstra coretitudinea protocolului prezentat.
+\newline
+\newline
+Initializarea din incipitul protocolului, va determina ca variabila numerica $color(v)$ sa aiba valori apartenente multimii $\{1,2,....5000\}$. (datorita asignarii $color(v) \leftarrow id(v)$)
+\newline
+In prima zi anagajatul $v$, prin faptul ca cere si primeste culoarea de la $color(boss(v))$, ne asigura memorarea atat a culorii sale cat si a culorii persoanei superior ierarhice, pentru a putea compara bitii din reprezentarile binare ale celor doua culori. 
+\newline
+\begin{center}
+$[color(v)]_2$=$...b_k b_{k+1}...b_1 b_0$
+\end{center}
+\begin{center}
+$[color(boss(v))]_2=...b'_k b'_{k+1}...b'_1 b'_0 $
+\end{center}
+Se va determina ulterior cel mai mic $i$ pentru care $b_i \not = b'_i$. Dar fiindca trebuie sa demonstram corectitudinea algoritmului vom alege cazul in care $i$-ul are valoare maximala (deoarece atunci reprezentarea lui binara va avea lungime maxima). $max(color(v))=5000$ iar $[5000]_2=10000000000100$ $(13 biti)$, ceea ce inseamna ca pozitia maximala va fi $i=12$ si $[12]_2=1100$. 
+\newline
+\newline
+Dupa ce am gasit aceasta pozitie, se va adauga la sfarsitul reprezentarii binare a lui i bitul sau $b_i$ dar cum $b_i \in \{0,1\}$ si ne intereseaza formarea de numere maximale vom considera ca $b_i=1$ si adaugam acest bit, formandu-se reprezentarea binara, convertita ulterior in   zecimal, $[11001]_{10}=25$ iar $color(v)=25$ (acesta va fi cel mai mare numar obtinut in urma asignarilor de culori din intreg arborele dupa prima zi). Cum culorile sunt numerotate de la 0, vom avea la finalul zilei 1, 26 de culori pe intreaga arborescenta ierarhica. Observam, asadar, o scadere drastica a numarului de culori.
+\newline
+\newline
+Faptul ca seful suprem $v_0$ pretinde ca valoarea lui $i=0$ ("primeste" acea culoare care are bitul cel mai din dreapta diferit de bitul sau $b_0$) nu ne va influenta cu absolut nimic estimarea maximala a culorilor.
+\newline
+\newline
+Procedam in mod analog pentru celelalte zile. La inceputul celei de a doua zile $max(color(v))=25$ iar $[25]_2=11001$, deci $i$-ul maximal va fi $4$. $[4]_2=100$ $\rightarrow$ adaugam bitul $b_i$ maximal, $b_i=1$ la sfarsit $\rightarrow$ $[1001]_{10}=9$, fapt ce ne genereaza $(9+$culoarea $0)$ $\rightarrow$ $9+1=10$ culori dupa cea de a doua zi, in arbore.
+\newline
+\newline
+In cea de a treia zi, $max(color(v))=9$ iar $[9]_2=1001$, deci $i$-ul maximal va fi $3$. $[3]_2=11$ $\rightarrow$ adaugam bitul $b_i$ maximal, $b_i=1$ la sfarsit $\rightarrow$ $[111]_{10}=7$, fapt ce ne genereaza $(7+$culoarea $0)$ $\rightarrow$ $7+1=8$ culori dupa cea de a treia zi, in arbore.
+\newline
+\newline
+In cea de a patra zi, $max(color(v))=7$ iar $[7]_2=111$, deci $i$-ul maximal va fi $2$. $[3]_2=10$ $\rightarrow$ adaugam bitul $b_i$ maximal, $b_i=1$ la sfarsit $\rightarrow$ $[101]_{10}=5$, fapt ce ne genereaza $(5+$culoarea $0)$ $\rightarrow$ $5+1=6$ culori dupa setul de 4 zile, in ierarhia noastra de angajati. Deci, dupa aceasta etapa, $\forall v, color(v) \in \{0,1,2,3,4,5\}$.
+\newline
+\newline
+Este de precizat faptul ca orice alta pozitie $i$ am fi considerat in cele 4 zile, mai mica decat pozitia maximala, nu ar fi modificat, comportamentul protocolului, datorita lungimii scrierii sale binare care ar fi fost mai mica. Deci, $\forall i $-ales, $i<max(i)$ am fi obtinut la finalul oricareia din cele patru zile o culoare deja existenta in arbore. Accentul cadea in schimb pe gasirea culorii care, scrisa in decimal, va fi maximala, ea dandu-ne cardinalul multimii de culori din ziua respectiva.
+\newline
+\newline
+Vom continua verificarea corectitudinii pentru cea de-a doua etapa, formata din 3 zile.
+\newline
+\newline
+La inceputul zilei intai, fiecare angajat $v$, cere si primeste culoarea $color(boss(v))$, avuta de acesta cu o seara inainte, pe care si-o atribuie. Instructiunea $color(v) \leftarrow color(boss(v))$ va determina o shiftare cu un nivel in jos, a tuturor celor 6 culori din arbore. De asemenea, va determina si ca subalternii unui sef sa aiba aceeasi culoare. 
+\newline
+\newline
+Seful suprem isi alege oricare din cele trei culori care trebuiesc obtinute in final $\{0,1,2\}$. Cum suntem in ziua  intai, $k=1$. Daca se va gasi un angajat care are culoarea $color(v)=6-k=5$, atunci ii cere lui $boss(v)$ sa ii comunice culoarea curenta, $color(boss(v))$, iar in acest mod va sti cum sa isi aleaga o culoare diferita  din $\{0,1,2\}$ de cea a superiorului sau, dar si de cea veche pe care a trimis-o subalternilor directi(in cazul exstentei acestora). Daca a transmis subalternilor o culoare din multimea $\{3,4,5\}$ inseamna ca va avea 2 optiuni de alegere din multimea $\{0,1,2\}$, daca nu, va avea o singura optiune (culoarea ramasa).
+\newline
+\newline
+Astfel, dupa parcurgerea intregului arbore nu va mai exista niciun angajat care sa aiba culoarea 5, deci in tot arborele vor exista numai culorile $\{0,1,2,3,4\}$.
+\newline
+\newline
+In cea de a doua zi, se va proceda analog zilei intai. Seful suprem isi alege una din cele 2 culori din multimea $\{0,1,2\}$ ramase nefolosite. Se produce shiftarea cu un nivel in jos a tuturor culorilor. In cazul de fata $k=2$, deci se urmareste eliminarea culorii $color(v)=6-2=4$. Iar protocolul functioneaza, conform pasilor prezentati anterior, la finalul celei de-a doua zile ramanand in arbore doar culorile $\{0,1,2,3\}$.
+\newline
+\newline
+In cea de a treia zi, analog celorlalte doua zile, seful suprem isi alege singura culoare ramasa dintre cele 3 culori. Faptul ca el alege in fiecare zi, din cele 3 cate o culoare diferita va face ca primul subaltern al sefului suprem sa aiba culoare diferita de acesta, si de asemenea, subalternul celui mentionat ultima oara sa aiba, la randul lui subalterni cu o culoare diferita de el. (acest lucru deoarece se produc acele shiftari de culori de sus in jos, cu un nivel). Se va elimina de aceasta data ultima culoare ce nu convine, $color(v)=6-k=6-3=3$. Deci in arbore vor ramane numai culorile $\{0,1,2\}$. Acest lucru insa nu este suficient pentru a demonstra ca se produce intr-adevar o 3-colorare. 
+\newline
+\newline
+3-colorarea se obtine in schimb in urma alegerii culorii, in momentul in care un angajat are o culoare necorespunzatoare $(3,4 sau 5)$ prin faptul ca el alege o culoare diferita de cea a sefului si a subalternilor lui, iar astfel 3-colorarea care spune ca oricare ai fi doua noduri adiacente, acestea au culori diferite, este satisfacuta. 
+\newline
+\newline
+Prin urmare in cea de a 8-a zi, 3-colorarea fiind realizata, fiecare angajat isi comanda tricoul de culoare:
+\begin{center}
+\textbf{rosu}, daca $color(v)=0$
+\end{center}
+\begin{center}
+\textbf{galben}, daca $color(v)=1$
+\end{center}
+\begin{center}
+\textbf{albastru}, daca $color(v)=2$
+\end{center}
+\
+Conchidem astfel ca protocolul este corect, determinand o 3-colorare in arborele ce reprezinta organizatia, dupa cele 7 zile.
+\
+\end{document}
